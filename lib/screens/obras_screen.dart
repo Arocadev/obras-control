@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/obra.dart';
+import 'detalle_obra_screen.dart';
 
 class ObrasScreen extends StatefulWidget {
   const ObrasScreen({super.key});
@@ -35,9 +36,7 @@ class _ObrasScreenState extends State<ObrasScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (controller.text.trim().isEmpty) {
-                  return;
-                }
+                if (controller.text.trim().isEmpty) return;
 
                 setState(() {
                   obras.add(
@@ -88,6 +87,16 @@ class _ObrasScreenState extends State<ObrasScreen> {
                   ),
                   child: ListTile(
                     title: Text(obra.nombre),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => DetalleObraScreen(
+                            obra: obra,
+                          ),
+                        ),
+                      );
+                    },
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () {
