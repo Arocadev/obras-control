@@ -22,11 +22,26 @@ Future<void> main() async {
 
   await Hive.initFlutter();
 
-  Hive.registerAdapter(TareaAdapter());
-  Hive.registerAdapter(MaterialObraAdapter());
-  Hive.registerAdapter(ObraAdapter());
-  Hive.registerAdapter(PagoAdapter());
-  Hive.registerAdapter(CobroAdapter());
+  Hive.registerAdapter(
+    TareaAdapter(),
+  );
+
+  Hive.registerAdapter(
+    MaterialObraAdapter(),
+  );
+
+  Hive.registerAdapter(
+    ObraAdapter(),
+  );
+
+  Hive.registerAdapter(
+    PagoAdapter(),
+  );
+
+  Hive.registerAdapter(
+    CobroAdapter(),
+  );
+
   Hive.registerAdapter(
     RecordatorioAdapter(),
   );
@@ -71,23 +86,20 @@ class ObraControlApp
       theme: ThemeData(
         colorScheme:
             ColorScheme.fromSeed(
-          seedColor: Colors.orange,
+          seedColor:
+              Colors.orange,
         ),
         useMaterial3: true,
       ),
       localizationsDelegates:
-          const [
-        GlobalMaterialLocalizations
-            .delegate,
-        GlobalWidgetsLocalizations
-            .delegate,
-        GlobalCupertinoLocalizations
-            .delegate,
-      ],
+          GlobalMaterialLocalizations
+              .delegates,
       supportedLocales: const [
         Locale('es'),
       ],
-      locale: const Locale('es'),
+      locale: const Locale(
+        'es',
+      ),
       home: const HomeScreen(),
     );
   }

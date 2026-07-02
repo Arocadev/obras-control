@@ -15,14 +15,12 @@ class StorageService {
   static const String cobrosBox =
       'cobros_box';
 
-  static const String
-      recordatoriosBox =
+  static const String recordatoriosBox =
       'recordatorios_box';
 
   // OBRAS
 
-  static Future<void>
-      guardarObras(
+  static Future<void> guardarObras(
     List<Obra> obras,
   ) async {
     final box =
@@ -49,8 +47,7 @@ class StorageService {
 
   // PAGOS
 
-  static Future<void>
-      guardarPagos(
+  static Future<void> guardarPagos(
     List<Pago> pagos,
   ) async {
     final box =
@@ -77,8 +74,7 @@ class StorageService {
 
   // COBROS
 
-  static Future<void>
-      guardarCobros(
+  static Future<void> guardarCobros(
     List<Cobro> cobros,
   ) async {
     final box =
@@ -88,8 +84,7 @@ class StorageService {
 
     await box.clear();
 
-    for (final cobro
-        in cobros) {
+    for (final cobro in cobros) {
       await box.add(cobro);
     }
   }
@@ -106,30 +101,10 @@ class StorageService {
 
   // RECORDATORIOS
 
-  static Future<void>
-      guardarRecordatorios(
-    List<Recordatorio>
-        recordatorios,
-  ) async {
-    final box =
-        Hive.box<
-            Recordatorio>(
-      recordatoriosBox,
-    );
-
-    await box.clear();
-
-    for (final r
-        in recordatorios) {
-      await box.add(r);
-    }
-  }
-
   static List<Recordatorio>
       cargarRecordatorios() {
     final box =
-        Hive.box<
-            Recordatorio>(
+        Hive.box<Recordatorio>(
       recordatoriosBox,
     );
 

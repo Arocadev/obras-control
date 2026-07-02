@@ -8,6 +8,7 @@ import '../models/pago.dart';
 import '../services/storage_service.dart';
 import '../widgets/leyenda_calendario.dart';
 import 'eventos_dia_screen.dart';
+import 'recordatorios_screen.dart';
 
 class CalendarioScreen extends StatefulWidget {
   const CalendarioScreen({
@@ -30,7 +31,11 @@ class _CalendarioScreenState
   @override
   void initState() {
     super.initState();
-    cargarEventos();
+
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) {
+      cargarEventos();
+    });
   }
 
   String nombreMes(
@@ -67,6 +72,12 @@ class _CalendarioScreenState
     final cobros =
         StorageService.cargarCobros();
 
+    final recordatorios =
+        StorageService
+            .cargarRecordatorios();
+
+    // Obras
+
     for (final obra in obras) {
       if (obra.fechaInicio != null) {
         todosEventos.add(
@@ -95,6 +106,8 @@ class _CalendarioScreenState
       }
     }
 
+    // Pagos pendientes
+
     for (final pago in pagos) {
       if (!pago.pagado) {
         todosEventos.add(
@@ -109,6 +122,8 @@ class _CalendarioScreenState
         );
       }
     }
+
+    // Cobros
 
     for (final cobro in cobros) {
       String nombreObra =
@@ -135,6 +150,23 @@ class _CalendarioScreenState
               Colors.blue,
         ),
       );
+    }
+
+    // Recordatorios
+
+    for (final r in recordatorios) {
+      if (!r.completado) {
+        todosEventos.add(
+          EventoCalendario(
+            fecha:
+                r.fecha,
+            titulo:
+                'Recordatorio: ${r.titulo}',
+            color:
+                Colors.purple,
+          ),
+        );
+      }
     }
 
     setState(() {});
@@ -195,6 +227,24 @@ class _CalendarioScreenState
         title: const Text(
           'Calendario',
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.notifications,
+            ),
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      const RecordatoriosScreen(),
+                ),
+              );
+
+              cargarEventos();
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
