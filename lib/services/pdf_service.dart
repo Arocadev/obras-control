@@ -24,6 +24,16 @@ class PdfService {
         obra.presupuesto -
             materialesTotal;
 
+    String fechaTexto(
+      DateTime? fecha,
+    ) {
+      if (fecha == null) {
+        return 'Sin fecha';
+      }
+
+      return '${fecha.day}/${fecha.month}/${fecha.year}';
+    }
+
     pdf.addPage(
       pw.MultiPage(
         build: (context) => [
@@ -36,28 +46,41 @@ class PdfService {
               ),
             ),
           ),
+
           pw.SizedBox(height: 20),
+
           pw.Text(
             'Estado: ${obra.estado}',
           ),
-          if (obra.fechaInicio != null)
-            pw.Text(
-              'Fecha inicio: ${obra.fechaInicio!.day}/${obra.fechaInicio!.month}/${obra.fechaInicio!.year}',
-            ),
+
+          pw.Text(
+            'Fecha inicio: ${fechaTexto(obra.fechaInicio)}',
+          ),
+
+          pw.Text(
+            'Fecha fin: ${fechaTexto(obra.fechaFin)}',
+          ),
+
           pw.SizedBox(height: 20),
+
           pw.Text(
             'Presupuesto: ${obra.presupuesto.toStringAsFixed(2)} EUR',
           ),
+
           pw.Text(
             'Cobrado: ${obra.cobrado.toStringAsFixed(2)} EUR',
           ),
+
           pw.Text(
             'Pendiente: ${pendiente.toStringAsFixed(2)} EUR',
           ),
+
           pw.Text(
             'Beneficio estimado: ${beneficio.toStringAsFixed(2)} EUR',
           ),
+
           pw.SizedBox(height: 30),
+
           pw.Text(
             'Tareas',
             style: pw.TextStyle(
@@ -66,12 +89,15 @@ class PdfService {
                   pw.FontWeight.bold,
             ),
           ),
+
           ...obra.tareas.map(
             (t) => pw.Text(
               '${t.hecha ? "[X]" : "[ ]"} ${t.nombre}',
             ),
           ),
+
           pw.SizedBox(height: 30),
+
           pw.Text(
             'Materiales',
             style: pw.TextStyle(
@@ -80,6 +106,7 @@ class PdfService {
                   pw.FontWeight.bold,
             ),
           ),
+
           ...obra.materiales.map(
             (m) => pw.Text(
               '${m.nombre} - ${m.cantidad} x ${m.precioUnidad.toStringAsFixed(2)} EUR = ${m.total.toStringAsFixed(2)} EUR',

@@ -23,6 +23,7 @@ class ObraAdapter extends TypeAdapter<Obra> {
       estado: fields[5] as String,
       fechaInicio: fields[6] as DateTime?,
       fechaFin: fields[7] as DateTime?,
+      id: fields[8] as String?,
       tareas: (fields[3] as List?)?.cast<Tarea>(),
       materiales: (fields[4] as List?)?.cast<MaterialObra>(),
     );
@@ -31,7 +32,7 @@ class ObraAdapter extends TypeAdapter<Obra> {
   @override
   void write(BinaryWriter writer, Obra obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.nombre)
       ..writeByte(1)
@@ -47,7 +48,9 @@ class ObraAdapter extends TypeAdapter<Obra> {
       ..writeByte(6)
       ..write(obj.fechaInicio)
       ..writeByte(7)
-      ..write(obj.fechaFin);
+      ..write(obj.fechaFin)
+      ..writeByte(8)
+      ..write(obj.id);
   }
 
   @override

@@ -31,6 +31,9 @@ class Obra extends HiveObject {
   @HiveField(7)
   DateTime? fechaFin;
 
+  @HiveField(8)
+  String id;
+
   Obra({
     required this.nombre,
     this.presupuesto = 0,
@@ -38,8 +41,13 @@ class Obra extends HiveObject {
     this.estado = 'Pendiente',
     this.fechaInicio,
     this.fechaFin,
+    String? id,
     List<Tarea>? tareas,
     List<MaterialObra>? materiales,
-  })  : tareas = tareas ?? [],
+  })  : id = id ??
+            DateTime.now()
+                .microsecondsSinceEpoch
+                .toString(),
+        tareas = tareas ?? [],
         materiales = materiales ?? [];
 }

@@ -1,14 +1,28 @@
 import 'package:hive/hive.dart';
+
+import '../models/cobro.dart';
 import '../models/obra.dart';
+import '../models/pago.dart';
 
 class StorageService {
   static const String obrasBox =
       'obras_box';
 
+  static const String pagosBox =
+      'pagos_box';
+
+  static const String cobrosBox =
+      'cobros_box';
+
+  // OBRAS
+
   static Future<void> guardarObras(
-      List<Obra> obras) async {
+    List<Obra> obras,
+  ) async {
     final box =
-        Hive.box<Obra>(obrasBox);
+        Hive.box<Obra>(
+      obrasBox,
+    );
 
     await box.clear();
 
@@ -17,9 +31,66 @@ class StorageService {
     }
   }
 
-  static List<Obra> cargarObras() {
+  static List<Obra>
+      cargarObras() {
     final box =
-        Hive.box<Obra>(obrasBox);
+        Hive.box<Obra>(
+      obrasBox,
+    );
+
+    return box.values.toList();
+  }
+
+  // PAGOS
+
+  static Future<void> guardarPagos(
+    List<Pago> pagos,
+  ) async {
+    final box =
+        Hive.box<Pago>(
+      pagosBox,
+    );
+
+    await box.clear();
+
+    for (final pago in pagos) {
+      await box.add(pago);
+    }
+  }
+
+  static List<Pago>
+      cargarPagos() {
+    final box =
+        Hive.box<Pago>(
+      pagosBox,
+    );
+
+    return box.values.toList();
+  }
+
+  // COBROS
+
+  static Future<void> guardarCobros(
+    List<Cobro> cobros,
+  ) async {
+    final box =
+        Hive.box<Cobro>(
+      cobrosBox,
+    );
+
+    await box.clear();
+
+    for (final cobro in cobros) {
+      await box.add(cobro);
+    }
+  }
+
+  static List<Cobro>
+      cargarCobros() {
+    final box =
+        Hive.box<Cobro>(
+      cobrosBox,
+    );
 
     return box.values.toList();
   }

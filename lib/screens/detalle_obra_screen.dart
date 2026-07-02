@@ -76,7 +76,9 @@ class _DetalleObraScreenState
                     );
                   },
                   child:
-                      const Text('Cancelar'),
+                      const Text(
+                    'Cancelar',
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -90,7 +92,9 @@ class _DetalleObraScreenState
                     );
                   },
                   child:
-                      const Text('Guardar'),
+                      const Text(
+                    'Guardar',
+                  ),
                 ),
               ],
             );
@@ -122,10 +126,31 @@ class _DetalleObraScreenState
     }
   }
 
-  String textoFecha() {
+  Future<void>
+      seleccionarFechaFin() async {
     final fecha =
-        widget.obra.fechaInicio;
+        await showDatePicker(
+      context: context,
+      initialDate:
+          widget.obra.fechaFin ??
+              DateTime.now(),
+      firstDate:
+          DateTime(2020),
+      lastDate:
+          DateTime(2100),
+    );
 
+    if (fecha != null) {
+      setState(() {
+        widget.obra.fechaFin =
+            fecha;
+      });
+    }
+  }
+
+  String textoFecha(
+    DateTime? fecha,
+  ) {
     if (fecha == null) {
       return 'Sin fecha';
     }
@@ -163,7 +188,8 @@ class _DetalleObraScreenState
                 ],
                 text:
                     'Resumen de la obra ${obra.nombre}',
-                    subject: 'Resumen de obra',
+                subject:
+                    'Resumen de obra',
               );
             },
           ),
@@ -182,19 +208,79 @@ class _DetalleObraScreenState
                 Icons.flag,
               ),
               title:
-                  Text(obra.estado),
+                  const Text(
+                'Estado',
+              ),
               subtitle:
-                  Text(textoFecha()),
-              onTap:
-                  seleccionarFechaInicio,
+                  Text(
+                obra.estado,
+              ),
               trailing:
                   IconButton(
-                icon: const Icon(
+                icon:
+                    const Icon(
                   Icons.edit,
                 ),
                 onPressed:
                     editarEstado,
               ),
+            ),
+          ),
+          Card(
+            margin:
+                const EdgeInsets.symmetric(
+              horizontal: 12,
+            ),
+            child: ListTile(
+              leading:
+                  const Icon(
+                Icons.calendar_month,
+              ),
+              title:
+                  const Text(
+                'Fecha inicio',
+              ),
+              subtitle:
+                  Text(
+                textoFecha(
+                  obra.fechaInicio,
+                ),
+              ),
+              trailing:
+                  const Icon(
+                Icons.edit_calendar,
+              ),
+              onTap:
+                  seleccionarFechaInicio,
+            ),
+          ),
+          Card(
+            margin:
+                const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 12,
+            ),
+            child: ListTile(
+              leading:
+                  const Icon(
+                Icons.event_available,
+              ),
+              title:
+                  const Text(
+                'Fecha fin',
+              ),
+              subtitle:
+                  Text(
+                textoFecha(
+                  obra.fechaFin,
+                ),
+              ),
+              trailing:
+                  const Icon(
+                Icons.edit_calendar,
+              ),
+              onTap:
+                  seleccionarFechaFin,
             ),
           ),
           Card(
@@ -211,7 +297,8 @@ class _DetalleObraScreenState
                   const Text(
                 'Tareas',
               ),
-              subtitle: Text(
+              subtitle:
+                  Text(
                 '$tareasPendientes pendientes',
               ),
               trailing:
@@ -235,8 +322,7 @@ class _DetalleObraScreenState
           ),
           Card(
             margin:
-                const EdgeInsets
-                    .symmetric(
+                const EdgeInsets.symmetric(
               horizontal: 12,
             ),
             child: ListTile(
@@ -248,7 +334,8 @@ class _DetalleObraScreenState
                   const Text(
                 'Materiales',
               ),
-              subtitle: Text(
+              subtitle:
+                  Text(
                 '${obra.materiales.length} materiales',
               ),
               trailing:
@@ -284,7 +371,8 @@ class _DetalleObraScreenState
                   const Text(
                 'Economía',
               ),
-              subtitle: Text(
+              subtitle:
+                  Text(
                 'Presupuesto: ${obra.presupuesto.toStringAsFixed(0)} EUR',
               ),
               trailing:

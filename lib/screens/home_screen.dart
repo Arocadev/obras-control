@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'calendario_screen.dart';
 import 'estadisticas_screen.dart';
+import 'finanzas_screen.dart';
 import 'obras_screen.dart';
-import 'pagos_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -21,7 +21,7 @@ class _HomeScreenState
 
   final pages = const [
     ObrasScreen(),
-    PagosScreen(),
+    FinanzasScreen(),
     CalendarioScreen(),
     EstadisticasScreen(),
   ];
@@ -52,7 +52,7 @@ class _HomeScreenState
           BottomNavigationBarItem(
             icon:
                 Icon(Icons.payments),
-            label: 'Pagos',
+            label: 'Finanzas',
           ),
           BottomNavigationBarItem(
             icon: Icon(
