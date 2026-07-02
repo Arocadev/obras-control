@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/obra.dart';
+import '../services/storage_service.dart';
 import 'detalle_obra_screen.dart';
 
 class ObrasScreen extends StatefulWidget {
@@ -10,7 +11,22 @@ class ObrasScreen extends StatefulWidget {
 }
 
 class _ObrasScreenState extends State<ObrasScreen> {
-  final List<Obra> obras = [];
+  List<Obra> obras = [];
+
+  @override
+  void initState() {
+    super.initState();
+    cargarObras();
+  }
+
+  void cargarObras() {
+    obras = StorageService.cargarObras();
+    setState(() {});
+  }
+
+  Future<void> guardarObras() async {
+    await StorageService.guardarObras(obras);
+  }
 
   void crearObra() {
     final controller = TextEditingController();
@@ -35,7 +51,7 @@ class _ObrasScreenState extends State<ObrasScreen> {
               child: const Text('Cancelar'),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (controller.text.trim().isEmpty) {
                   return;
                 }
@@ -48,7 +64,11 @@ class _ObrasScreenState extends State<ObrasScreen> {
                   );
                 });
 
-                Navigator.pop(context);
+                await guardarObras();
+
+                if (mounted) {
+                  Navigator.pop(context);
+                }
               },
               child: const Text('Guardar'),
             ),
@@ -58,10 +78,12 @@ class _ObrasScreenState extends State<ObrasScreen> {
     );
   }
 
-  void eliminarObra(int index) {
+  Future<void> eliminarObra(int index) async {
     setState(() {
       obras.removeAt(index);
     });
+
+    await guardarObras();
   }
 
   @override
@@ -89,26 +111,38 @@ class _ObrasScreenState extends State<ObrasScreen> {
                   ),
                   child: ListTile(
                     title: Text(obra.nombre),
-                    onTap: () {
-                      Navigator.push(
+                    onTap: () async {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => DetalleObraScreen(
+                          builder: (_) =>
+                              DetalleObraScreen(
                             obra: obra,
                           ),
                         ),
                       );
+
+                      await guardarObras();
+
+                      setState(() {});
                     },
-                    trailing: PopupMenuButton<String>(
-                      onSelected: (value) {
-                        if (value == 'delete') {
-                          eliminarObra(index);
+                    trailing:
+                        PopupMenuButton<String>(
+                      onSelected: (value) async {
+                        if (value ==
+                            'delete') {
+                          await eliminarObra(
+                            index,
+                          );
                         }
                       },
-                      itemBuilder: (_) => const [
+                      itemBuilder: (_) =>
+                          const [
                         PopupMenuItem(
                           value: 'delete',
-                          child: Text('Eliminar obra'),
+                          child: Text(
+                            'Eliminar obra',
+                          ),
                         ),
                       ],
                     ),
@@ -116,7 +150,8 @@ class _ObrasScreenState extends State<ObrasScreen> {
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:
+          FloatingActionButton(
         onPressed: crearObra,
         child: const Icon(Icons.add),
       ),

@@ -21,9 +21,10 @@ class _EconomiaScreenState
     required double valorActual,
     required Function(double) onGuardar,
   }) {
-    final controller =
-        TextEditingController(
-      text: valorActual.toString(),
+    final controller = TextEditingController(
+      text: valorActual == 0
+          ? ''
+          : valorActual.toString(),
     );
 
     showDialog(
@@ -37,28 +38,25 @@ class _EconomiaScreenState
                 const TextInputType.numberWithOptions(
               decimal: true,
             ),
-            decoration:
-                const InputDecoration(
+            autofocus: true,
+            decoration: const InputDecoration(
               hintText: '0',
             ),
           ),
           actions: [
             TextButton(
-              onPressed: () =>
-                  Navigator.pop(context),
+              onPressed: () {
+                Navigator.pop(context);
+              },
               child: const Text('Cancelar'),
             ),
             ElevatedButton(
               onPressed: () {
-                final valor =
-                    double.tryParse(
-                          controller.text
-                              .replaceAll(
-                            ',',
-                            '.',
-                          ),
-                        ) ??
-                        0;
+                final valor = double.tryParse(
+                      controller.text
+                          .replaceAll(',', '.'),
+                    ) ??
+                    0;
 
                 setState(() {
                   onGuardar(valor);
@@ -99,22 +97,18 @@ class _EconomiaScreenState
       body: ListView(
         children: [
           Card(
-            margin:
-                const EdgeInsets.all(12),
+            margin: const EdgeInsets.all(12),
             child: ListTile(
-              title:
-                  const Text('Presupuesto'),
+              title: const Text('Presupuesto'),
               subtitle: Text(
                 '${obra.presupuesto.toStringAsFixed(2)} €',
               ),
               onTap: () {
                 editarDinero(
-                  titulo:
-                      'Presupuesto',
+                  titulo: 'Presupuesto',
                   valorActual:
                       obra.presupuesto,
-                  onGuardar:
-                      (valor) {
+                  onGuardar: (valor) {
                     obra.presupuesto =
                         valor;
                   },
@@ -128,8 +122,7 @@ class _EconomiaScreenState
               horizontal: 12,
             ),
             child: ListTile(
-              title:
-                  const Text('Cobrado'),
+              title: const Text('Cobrado'),
               subtitle: Text(
                 '${obra.cobrado.toStringAsFixed(2)} €',
               ),
@@ -138,21 +131,17 @@ class _EconomiaScreenState
                   titulo: 'Cobrado',
                   valorActual:
                       obra.cobrado,
-                  onGuardar:
-                      (valor) {
-                    obra.cobrado =
-                        valor;
+                  onGuardar: (valor) {
+                    obra.cobrado = valor;
                   },
                 );
               },
             ),
           ),
           Card(
-            margin:
-                const EdgeInsets.all(12),
+            margin: const EdgeInsets.all(12),
             child: ListTile(
-              title:
-                  const Text('Pendiente'),
+              title: const Text('Pendiente'),
               subtitle: Text(
                 '${pendiente.toStringAsFixed(2)} €',
               ),

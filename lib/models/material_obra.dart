@@ -1,6 +1,16 @@
-class MaterialObra {
+import 'package:hive/hive.dart';
+
+part 'material_obra.g.dart';
+
+@HiveType(typeId: 1)
+class MaterialObra extends HiveObject {
+  @HiveField(0)
   String nombre;
+
+  @HiveField(1)
   double cantidad;
+
+  @HiveField(2)
   double precioUnidad;
 
   MaterialObra({
@@ -9,7 +19,9 @@ class MaterialObra {
     required this.precioUnidad,
   });
 
-  double get total => cantidad * precioUnidad;
+  double get total =>
+      cantidad * precioUnidad;
 
-  double get totalConIva => total * 1.21;
+  double get totalConIva =>
+      total * 1.21;
 }
