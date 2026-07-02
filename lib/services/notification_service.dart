@@ -1,4 +1,8 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart'
+    as tz;
+import 'package:timezone/timezone.dart'
+    as tz;
 
 class NotificationService {
   static final FlutterLocalNotificationsPlugin
@@ -6,6 +10,8 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
 
   static Future<void> init() async {
+    tz.initializeTimeZones();
+
     const android =
         AndroidInitializationSettings(
       '@mipmap/ic_launcher',
@@ -56,6 +62,46 @@ class NotificationService {
   }
 
   static Future<void>
+      programarNotificacion({
+    required int id,
+    required String titulo,
+    required String cuerpo,
+    required DateTime fecha,
+  }) async {
+    const detalles =
+        NotificationDetails(
+      android:
+          AndroidNotificationDetails(
+        'obras_channel',
+        'ObraControl',
+        channelDescription:
+            'Avisos y recordatorios',
+        importance:
+            Importance.max,
+        priority:
+            Priority.high,
+      ),
+    );
+
+    await _notifications.zonedSchedule(
+      id,
+      titulo,
+      cuerpo,
+      tz.TZDateTime.from(
+        fecha,
+        tz.local,
+      ),
+      detalles,
+      androidScheduleMode:
+          AndroidScheduleMode
+              .exactAllowWhileIdle,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation
+              .absoluteTime,
+    );
+  }
+
+  static Future<void>
       cancelar(int id) async {
     await _notifications.cancel(
       id,
@@ -64,7 +110,6 @@ class NotificationService {
 
   static Future<void>
       cancelarTodas() async {
-    await _notifications
-        .cancelAll();
+    await _notifications.cancelAll();
   }
 }

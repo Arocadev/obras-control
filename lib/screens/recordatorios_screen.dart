@@ -107,36 +107,93 @@ class _RecordatoriosScreenState
                         title:
                             Text(
                           r.titulo,
+                          style:
+                              TextStyle(
+                            decoration:
+                                r.completado
+                                    ? TextDecoration
+                                        .lineThrough
+                                    : null,
+                          ),
                         ),
                         subtitle:
                             Text(
                           '${r.fecha.day}/${r.fecha.month}/${r.fecha.year}',
                         ),
-                        onTap:
-                            () async {
-                          r.completado =
-                              !r.completado;
-
-                          await r.save();
-
-                          cargar();
-                        },
                         trailing:
-                            IconButton(
-                          icon:
-                              const Icon(
-                            Icons
-                                .delete,
-                          ),
-                          onPressed:
-                              () async {
-                            await ReminderService
-                                .eliminar(
-                              index,
-                            );
+                            PopupMenuButton<
+                                String>(
+                          onSelected:
+                              (
+                                value,
+                              ) async {
+                            if (value ==
+                                'completar') {
+                              r.completado =
+                                  !r.completado;
 
-                            cargar();
+                              await r
+                                  .save();
+
+                              cargar();
+                            }
+
+                            if (value ==
+                                'eliminar') {
+                              await ReminderService
+                                  .eliminar(
+                                index,
+                              );
+
+                              cargar();
+                            }
+
+                            if (value ==
+                                'editar') {
+                              ScaffoldMessenger.of(
+                                context,
+                              ).showSnackBar(
+                                const SnackBar(
+                                  content:
+                                      Text(
+                                    'Próximamente',
+                                  ),
+                                ),
+                              );
+                            }
                           },
+                          itemBuilder:
+                              (
+                                context,
+                              ) =>
+                                  [
+                            const PopupMenuItem(
+                              value:
+                                  'editar',
+                              child:
+                                  Text(
+                                'Editar',
+                              ),
+                            ),
+                            PopupMenuItem(
+                              value:
+                                  'completar',
+                              child:
+                                  Text(
+                                r.completado
+                                    ? 'Marcar pendiente'
+                                    : 'Marcar completado',
+                              ),
+                            ),
+                            const PopupMenuItem(
+                              value:
+                                  'eliminar',
+                              child:
+                                  Text(
+                                'Eliminar',
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );
