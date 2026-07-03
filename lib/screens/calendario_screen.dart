@@ -6,6 +6,7 @@ import '../services/storage_service.dart';
 import '../widgets/leyenda_calendario.dart';
 import 'eventos_dia_screen.dart';
 import 'recordatorios_screen.dart';
+import 'eventos_agrupados_screen.dart';
 
 class CalendarioScreen extends StatefulWidget {
   const CalendarioScreen({
@@ -185,6 +186,95 @@ class _CalendarioScreenState
                 dia.day;
       },
     ).toList();
+  }
+
+  Map<String,
+    List<EventoCalendario>>
+    eventosSemanaAgrupados() {
+  const dias = [
+    'Lunes',
+    'Martes',
+    'Miércoles',
+    'Jueves',
+    'Viernes',
+    'Sábado',
+    'Domingo',
+  ];
+
+  final mapa =
+      <String,
+          List<EventoCalendario>>{};
+
+  for (final e
+      in todosEventos) {
+    final diferencia =
+        e.fecha
+            .difference(
+              DateTime.now(),
+            )
+            .inDays;
+
+    if (diferencia >= 0 &&
+        diferencia < 7) {
+      final nombre =
+          dias[
+              e.fecha.weekday -
+                  1];
+
+      mapa.putIfAbsent(
+        nombre,
+        () => [],
+      );
+
+      mapa[nombre]!
+          .add(e);
+    }
+  }
+
+  return mapa;
+}
+
+  Map<String,
+      List<EventoCalendario>>
+      eventosMesAgrupados() {
+    final mapa =
+        <String,
+            List<EventoCalendario>>{};
+
+    for (final e
+        in todosEventos) {
+      if (e.fecha.month ==
+              diaEnfocado.month &&
+          e.fecha.year ==
+              diaEnfocado.year) {
+        final semana =
+            ((e.fecha.day - 1) ~/ 7) +
+                1;
+
+        final titulo =
+            'Semana $semana';
+
+        mapa.putIfAbsent(
+          titulo,
+          () => [],
+        );
+
+        mapa[titulo]!
+            .add(e);
+      }
+    }
+
+    final ordenado =
+        Map.fromEntries(
+      mapa.entries.toList()
+        ..sort(
+          (a, b) => a.key.compareTo(
+            b.key,
+          ),
+        ),
+    );
+
+    return ordenado;
   }
 
   @override
@@ -547,26 +637,40 @@ class _CalendarioScreenState
         12,
       ),
       onTap: () {
-        String? titulo;
-
         if (tituloResumen ==
             'Semanal') {
-          final inicio =
-              DateTime.now();
-
-          final fin =
-              inicio.add(
-            const Duration(
-              days: 6,
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) =>
+                  EventosAgrupadosScreen(
+                titulo:
+                    'Esta semana',
+                grupos:
+                    eventosSemanaAgrupados(),
+              ),
             ),
           );
 
-          titulo =
-              'Semana del ${inicio.day}/${inicio.month} al ${fin.day}/${fin.month}';
-        } else if (tituloResumen ==
+          return;
+        }
+
+        if (tituloResumen ==
             'Mensual') {
-          titulo =
-              '${nombreMes(diaEnfocado.month)} ${diaEnfocado.year}';
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) =>
+                  EventosAgrupadosScreen(
+                titulo:
+                    '${nombreMes(diaEnfocado.month)} ${diaEnfocado.year}',
+                grupos:
+                    eventosMesAgrupados(),
+              ),
+            ),
+          );
+
+          return;
         }
 
         Navigator.push(
@@ -579,7 +683,7 @@ class _CalendarioScreenState
               eventos:
                   eventos,
               titulo:
-                  titulo,
+                  tituloResumen,
             ),
           ),
         );
