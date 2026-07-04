@@ -27,7 +27,6 @@ dependencies:
   timezone: ^0.9.4
   google_fonts: ^6.3.0
   fl_chart: ^1.0.0
-  flutter_native_splash: ^2.4.6
 
 dev_dependencies:
   flutter_test:
@@ -43,14 +42,6 @@ flutter_launcher_icons:
   image_path: "assets/icono.png"
   adaptive_icon_background: "#FAF0E6"
   adaptive_icon_foreground: "assets/icono.png"
-
-flutter_native_splash:
-  color: "#FAF0E6"
-  image: assets/splash.png
-  android: true
-  ios: false
-  fullscreen: true
-  android_gravity: fill
 
 flutter:
   uses-material-design: true
