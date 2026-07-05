@@ -133,86 +133,80 @@ class _MaterialesScreenState extends State<MaterialesScreen> {
         elevation: 2,
         title: const Text('Materiales', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w600)),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: materiales.isEmpty
-                ? const Center(child: Text('No hay materiales'))
-                : ListView.builder(
-                    padding: const EdgeInsets.only(top: 8, bottom: 16),
-                    itemCount: materiales.length,
-                    itemBuilder: (context, index) {
-                      final material = materiales[index];
-                      return Card(
-                        elevation: 0.5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18),
-                          side: BorderSide(color: Colors.grey.shade200, width: 1),
-                        ),
-                        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-                          title: Text(material.nombre, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.only(top: 4),
-                            child: Text(
-                              '${material.cantidad} x ${material.precioUnidad.toStringAsFixed(2)} € = ${material.total.toStringAsFixed(2)} €',
-                              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                            ),
-                          ),
-                          trailing: PopupMenuButton<String>(
-                            icon: Icon(Icons.more_vert, color: Colors.grey.shade700),
-                            onSelected: (value) async {
-                              if (value == 'edit') editarMaterial(index);
-                              if (value == 'delete') {
-                                final borrar = await confirmarEliminar(material.nombre);
-                                if (borrar) setState(() => materiales.removeAt(index));
-                              }
-                            },
-                            itemBuilder: (_) => const [
-                              PopupMenuItem(value: 'edit', child: Text('Editar')),
-                              PopupMenuItem(value: 'delete', child: Text('Eliminar')),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.fromLTRB(12, 0, 12, MediaQuery.of(context).padding.bottom + 12),
+        child: Card(
+          elevation: 0.5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+            side: BorderSide(color: Colors.grey.shade200, width: 1),
           ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(12, 0, 12, MediaQuery.of(context).padding.bottom + 80),
-            child: Card(
-              elevation: 0.5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-                side: BorderSide(color: Colors.grey.shade200, width: 1),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Total: ${total.toStringAsFixed(2)} €',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Total + IVA (21%): ${totalConIva.toStringAsFixed(2)} €',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey.shade600),
-                    ),
-                  ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Total: ${total.toStringAsFixed(2)} €',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
                 ),
-              ),
+                const SizedBox(height: 6),
+                Text(
+                  'Total + IVA (21%): ${totalConIva.toStringAsFixed(2)} €',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey.shade600),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
+      body: materiales.isEmpty
+          ? const Center(child: Text('No hay materiales'))
+          : ListView.builder(
+              padding: const EdgeInsets.only(top: 8, bottom: 16),
+              itemCount: materiales.length,
+              itemBuilder: (context, index) {
+                final material = materiales[index];
+                return Card(
+                  elevation: 0.5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                    side: BorderSide(color: Colors.grey.shade200, width: 1),
+                  ),
+                  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                    title: Text(material.nombre, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        '${material.cantidad} x ${material.precioUnidad.toStringAsFixed(2)} € = ${material.total.toStringAsFixed(2)} €',
+                        style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                      ),
+                    ),
+                    trailing: PopupMenuButton<String>(
+                      icon: Icon(Icons.more_vert, color: Colors.grey.shade700),
+                      onSelected: (value) async {
+                        if (value == 'edit') editarMaterial(index);
+                        if (value == 'delete') {
+                          final borrar = await confirmarEliminar(material.nombre);
+                          if (borrar) setState(() => materiales.removeAt(index));
+                        }
+                      },
+                      itemBuilder: (_) => const [
+                        PopupMenuItem(value: 'edit', child: Text('Editar')),
+                        PopupMenuItem(value: 'delete', child: Text('Eliminar')),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(right: 8, bottom: 10),
+        padding: const EdgeInsets.only(right: 8, bottom: 90),
         child: SizedBox(
           width: 54,
           height: 54,
