@@ -82,19 +82,19 @@ Exporta e importa todos los datos en formato JSON para no perder nada al cambiar
 
 **Crear proyecto**
 
-![Crear proyecto](assets/crear-proyecto.gif)
+<img src="assets/crear-proyecto.gif" width="300" />
 
 **Finanzas**
 
-![Finanzas](assets/crear-finanza.gif)
+<img src="assets/crear-finanza.gif" width="300" />
 
 **Calendario**
 
-![Calendario](assets/calendario.gif)
+<img src="assets/calendario.gif" width="300" />
 
 **Estadísticas**
 
-![Estadísticas](assets/resumen.gif)
+<img src="assets/resumen.gif" width="300" />
 
 ---
 
@@ -194,7 +194,6 @@ Los datos se almacenan localmente en el dispositivo con Hive. Para no perder los
 ## 🗺️ Roadmap
 
 - [x] APK disponible en GitHub Releases
-- [ ] Capturas y demo en el portfolio (aroca.dev)
 - [ ] Sentinel — plataforma de despliegue propia
 
 ---
